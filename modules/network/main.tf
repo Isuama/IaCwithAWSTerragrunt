@@ -72,40 +72,40 @@ resource "aws_route_table_association" "public_tr_a" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-# 8 create external/elastic ip
-resource "aws_eip" "eip_nat_gw" {
-  vpc = true
-}
+## 8 create external/elastic ip
+#resource "aws_eip" "eip_nat_gw" {
+#  vpc = true
+#}
+#
+## 9 - create NAT gw
+#resource "aws_nat_gateway" "nat_gw" {
+#  allocation_id = aws_eip.eip_nat_gw.id
+#  subnet_id = aws_subnet.public_sb_1.id
+#  tags = {
+#    Name = "Nat_GW01"
+#  }
+#  depends_on = [ aws_internet_gateway.gw ]
+#}
 
-# 9 - create NAT gw
-resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.eip_nat_gw.id
-  subnet_id = aws_subnet.public_sb_1.id
-  tags = {
-    Name = "Nat_GW01"
-  }
-  depends_on = [ aws_internet_gateway.gw ]
-}
+## 10 create route table - private through NAT gw to the internet
+#resource "aws_route_table" "private_rt" {
+#  vpc_id = aws_vpc.main_vpc.id
+#
+#  route {
+#    cidr_block = "0.0.0.0/0"
+#    gateway_id = aws_nat_gateway.nat_gw.id
+#  }
+#
+#  tags = {
+#    Name = "private-route"
+#  }
+#}
 
-# 10 create route table - private through NAT gw to the internet
-resource "aws_route_table" "private_rt" {
-  vpc_id = aws_vpc.main_vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat_gw.id
-  }
-
-  tags = {
-    Name = "private-route"
-  }
-}
-
-# 11 private create route association
-resource "aws_route_table_association" "private_tr_a" {
-  subnet_id      = aws_subnet.private_sb_1.id
-  route_table_id = aws_route_table.private_rt.id
-}
-# output "List_of_AZs" {
-#   value = data.aws_availability_zones.available
-# }
+## 11 private create route association
+#resource "aws_route_table_association" "private_tr_a" {
+#  subnet_id      = aws_subnet.private_sb_1.id
+#  route_table_id = aws_route_table.private_rt.id
+#}
+## output "List_of_AZs" {
+##   value = data.aws_availability_zones.available
+## }

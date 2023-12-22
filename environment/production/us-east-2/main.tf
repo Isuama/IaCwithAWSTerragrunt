@@ -5,18 +5,24 @@ terraform {
       version = "~> 5.0"
     }
   }
-  backend "s3" {
-    bucket         = "uow-terraform-state-bucket"
-    key            = "production/us-east-2/terraform.tfstate"
-    region         = "us-east-2"
-    dynamodb_table = "uow-terraform-state-lock-dynamo"
+  backend "local" {
+    path = "dev/vpc/terraform.tfstate"
   }
 }
 
+# 1 Configure the AWS Provider
+#provider "aws" {
+#  region = "network"
+#  profile = "terraform-admin-source-profile"
+#
+#}
 module "network" {
     source = "../../../modules/network"
+    env = "prod"
+    azs = ["us-east-1","us-east-2"]
     main_vpc_cidr = var.main_vpc_cidr
-    public_subnet_cidr = var.public_subnet_cidr
-    private_subnet_cidr = var.private_subnet_cidr
-    region_location = var.region_location
+    private_subnets = var.private_subnets
+    public_subnets = var.public_subnets
+    private_subnet_tags = var.private_subnet_tags
+    public_subnet_tags = var.public_subnet_tags
 }

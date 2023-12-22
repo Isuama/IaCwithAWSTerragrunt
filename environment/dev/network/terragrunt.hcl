@@ -1,6 +1,7 @@
 include "root" {
   path   = find_in_parent_folders("common.hcl")
 }
+
 terraform {
   source = "../../../modules/network"
 
@@ -10,9 +11,10 @@ terraform {
       "plan",
       "import",
       "push",
-      "refresh"
+      "refresh",
+      "destroy"
     ]
 
-    required_var_files = ["${get_parent_terragrunt_dir()}/configuration/dev/us-east-2/network/terraform.tfvars"]
+    required_var_files = ["${get_parent_terragrunt_dir()}/configuration/dev/env.hcl","${get_parent_terragrunt_dir()}/configuration/dev/network/terraform.tfvars"]
   }
 }

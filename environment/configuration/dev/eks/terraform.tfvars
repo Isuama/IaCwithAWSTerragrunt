@@ -11,3 +11,6 @@ node_groups = {
     }
   }
 }
+
+#run below command to connect to k8s
+#aws eks update-kubeconfig  --name dev-demo --region us-east-2
